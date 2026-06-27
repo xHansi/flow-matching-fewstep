@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+
+# data & artifacts
+data/
+results/**/*.png
+results/**/*.pt
+results/**/samples/
+checkpoints/
+*.pt
+*.ckpt
+
+# notebooks
+.ipynb_checkpoints/
+
+# os / editor
+.DS_Store
+.idea/
+.vscode/
