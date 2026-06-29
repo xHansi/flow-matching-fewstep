@@ -13,7 +13,7 @@ Local (Apple Silicon / CPU / CUDA) with [uv](https://docs.astral.sh/uv/):
 
 ```bash
 uv sync
-uv run python -m scripts.train --help   # once scripts exist
+uv run python -m scripts.train --method flow --dataset mnist   # or --method ddpm
 ```
 
 On Kaggle (T4 GPU), torch is preinstalled:
@@ -45,9 +45,9 @@ notebooks/
 Work in progress, built milestone by milestone:
 
 - [x] 1 — repo init, utils/seeds, MNIST dataloader (32x32, [-1, 1])
-- [ ] 2 — time- and class-conditioned UNet
-- [ ] 3 — Rectified Flow: interpolation, velocity target, Euler sampler
-- [ ] 4 — training script + loss curve + first samples
+- [x] 2 — time- and class-conditioned UNet
+- [x] 3 — Rectified Flow: interpolation, velocity target, Euler sampler
+- [x] 4 — training script + loss curve + first samples
 - [ ] 5 — DDPM baseline (DDPM + DDIM samplers)
 - [ ] 6 — sampling at multiple step counts, sample grids
 - [ ] 7 — FID vs. step count (pytorch-fid + MNIST-FID)
