@@ -18,6 +18,7 @@ concretely, what was AI-assisted and how the results were verified.
 | `src/flow/rectified_flow.py` (interpolation, velocity, Euler sampler, CFG) | Written by AI | Smoke test: loss backward, sampling at 1/2/8 steps; checked the interpolation/velocity math against the notes. |
 | `src/utils/ema.py`, `src/utils/plotting.py` | Written by AI | Reviewed; verified EMA updates and that grids/curves render. |
 | `scripts/train.py` (training loop, label dropout, EMA, checkpointing) | Written by AI | Ran a 60-step smoke train on MNIST: loss dropped, checkpoint + loss curve + sample grid produced. |
+| `src/flow/ddpm.py` (eps-prediction DDPM, DDIM/DDPM samplers) | Written by AI | Smoke test: loss backward, sampling at 1/2/8/50 steps, checked the DDIM update + eta (0=DDIM, 1=ancestral DDPM). |
 
 ## What I did myself
 
