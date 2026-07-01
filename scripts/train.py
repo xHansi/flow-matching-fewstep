@@ -5,12 +5,10 @@ import torch
 from torch import optim
 from tqdm import tqdm
 
-from src.data import make_loaders
+from src.data import DATASET_META, make_loaders
 from src.flow import make_method
 from src.models import UNet
 from src.utils import EMA, get_device, save_loss_curve, save_samples, set_seed
-
-DATASET_META = {"mnist": dict(channels=1, num_classes=10, image_size=32)}
 
 
 def parse_args() -> argparse.Namespace:
