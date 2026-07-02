@@ -51,7 +51,7 @@ Work in progress, built milestone by milestone:
 - [x] 5 — DDPM baseline (DDPM + DDIM samplers)
 - [x] 6 — sampling at multiple step counts, sample grids
 - [x] 7 — FID vs. step count (pytorch-fid + MNIST-FID)
-- [ ] 8 — reflow experiment (class-conditional + CFG already built in)
+- [x] 8 — reflow experiment (class-conditional + CFG already built in)
 - [ ] 9 — optional second dataset (Roman coins)
 - [ ] 10 — demo + results notebooks, final README
 
