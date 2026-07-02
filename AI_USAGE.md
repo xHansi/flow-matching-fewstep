@@ -19,6 +19,8 @@ concretely, what was AI-assisted and how the results were verified.
 | `src/utils/ema.py`, `src/utils/plotting.py` | Written by AI | Reviewed; verified EMA updates and that grids/curves render. |
 | `scripts/train.py` (training loop, label dropout, EMA, checkpointing) | Written by AI | Ran a 60-step smoke train on MNIST: loss dropped, checkpoint + loss curve + sample grid produced. |
 | `src/flow/ddpm.py` (eps-prediction DDPM, DDIM/DDPM samplers) | Written by AI | Smoke test: loss backward, sampling at 1/2/8/50 steps, checked the DDIM update + eta (0=DDIM, 1=ancestral DDPM). |
+| `scripts/sample.py`, `src/inference.py` (multi-step grids, checkpoint loader) | Written by AI | Ran against a checkpoint; confirmed grids at several step counts with shared seed. |
+| `src/metrics/` + `scripts/eval_fid.py` (InceptionV3 FID + MNIST-FID, FID-vs-steps) | Written by AI | Smoke-ran both metrics end-to-end (json + plots); checked the Frechet-distance usage and the shared `.features()` interface. |
 
 ## What I did myself
 

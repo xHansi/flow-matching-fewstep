@@ -49,9 +49,9 @@ Work in progress, built milestone by milestone:
 - [x] 3 — Rectified Flow: interpolation, velocity target, Euler sampler
 - [x] 4 — training script + loss curve + first samples
 - [x] 5 — DDPM baseline (DDPM + DDIM samplers)
-- [ ] 6 — sampling at multiple step counts, sample grids
-- [ ] 7 — FID vs. step count (pytorch-fid + MNIST-FID)
-- [ ] 8 — class-conditional + classifier-free guidance, reflow
+- [x] 6 — sampling at multiple step counts, sample grids
+- [x] 7 — FID vs. step count (pytorch-fid + MNIST-FID)
+- [ ] 8 — reflow experiment (class-conditional + CFG already built in)
 - [ ] 9 — optional second dataset (Roman coins)
 - [ ] 10 — demo + results notebooks, final README
 

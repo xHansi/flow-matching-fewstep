@@ -10,6 +10,21 @@ def save_samples(x: torch.Tensor, path: str, nrow: int = 10) -> None:
     save_image(x, path, nrow=nrow, normalize=True, value_range=(-1, 1))
 
 
+def save_fid_curve(curves: dict[str, tuple[list[int], list[float]]], path: str, title: str) -> None:
+    plt.figure(figsize=(6, 4))
+    for name, (steps, fids) in curves.items():
+        plt.plot(steps, fids, marker="o", label=name)
+    plt.xscale("log", base=2)
+    plt.xlabel("sampling steps")
+    plt.ylabel("FID")
+    plt.title(title)
+    plt.legend()
+    plt.grid(True, which="both", alpha=0.3)
+    plt.tight_layout()
+    plt.savefig(path, dpi=120)
+    plt.close()
+
+
 def save_loss_curve(losses: list[float], path: str) -> None:
     plt.figure(figsize=(6, 4))
     plt.plot(losses, lw=0.8)
