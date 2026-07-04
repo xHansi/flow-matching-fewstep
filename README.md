@@ -95,7 +95,14 @@ from `notebooks/02_results.ipynb`.
 - [x] 6 — sampling at multiple step counts, sample grids
 - [x] 7 — FID vs. step count (pytorch-fid + MNIST-FID)
 - [x] 8 — reflow experiment (class-conditional + CFG already built in)
-- [ ] 9 — optional second dataset (Roman coins) — dataloader is structured for it
+- [~] 9 — Roman coins: loader + train/sample support scaffolded (unconditional,
+  `--dataset coins --data-root <folder>`); needs a dataset + a heavier run
 - [x] 10 — demo + results notebooks, README
+
+## Tests
+
+```bash
+uv run pytest        # shapes, sampler determinism, EMA, both methods, coins loader
+```
 
 See [`AI_USAGE.md`](AI_USAGE.md) for the AI-use statement (mandatory deliverable).

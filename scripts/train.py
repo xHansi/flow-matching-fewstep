@@ -14,7 +14,8 @@ from fmfs.utils import EMA, get_device, save_loss_curve, save_samples, set_seed
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Train Flow Matching or DDPM on MNIST.")
     p.add_argument("--method", choices=["flow", "ddpm"], default="flow")
-    p.add_argument("--dataset", choices=["mnist"], default="mnist")
+    p.add_argument("--dataset", choices=["mnist", "coins"], default="mnist")
+    p.add_argument("--data-root", type=str, default="data", help="coins: folder of images")
     p.add_argument("--epochs", type=int, default=30)
     p.add_argument("--max-steps", type=int, default=0, help="cap total steps (0 = full epochs)")
     p.add_argument("--batch-size", type=int, default=128)
@@ -55,6 +56,7 @@ def main() -> None:
 
     train_loader, _ = make_loaders(
         args.dataset,
+        data_root=args.data_root,
         image_size=meta["image_size"],
         batch_size=args.batch_size,
         num_workers=args.num_workers,
