@@ -4,8 +4,8 @@ __pycache__/
 .venv/
 *.egg-info/
 
-# data & artifacts
-data/
+# data & artifacts (anchored to repo root so it does not match fmfs/data/)
+/data/
 results/**/*.png
 results/**/*.pt
 results/**/samples/
