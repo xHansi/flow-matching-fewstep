@@ -61,7 +61,7 @@ Everything is seeded; checkpoints are self-describing (architecture stored insid
 ## Structure
 
 ```
-src/
+fmfs/
   models/unet.py          time- and class-conditioned UNet (+ CFG null class)
   flow/rectified_flow.py  interpolation, velocity target, Euler sampler, reflow coupling
   flow/ddpm.py            baseline: beta schedule, eps prediction, DDPM/DDIM samplers

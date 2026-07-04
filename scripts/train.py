@@ -5,10 +5,10 @@ import torch
 from torch import optim
 from tqdm import tqdm
 
-from src.data import DATASET_META, make_loaders
-from src.flow import make_method
-from src.models import UNet
-from src.utils import EMA, get_device, save_loss_curve, save_samples, set_seed
+from fmfs.data import DATASET_META, make_loaders
+from fmfs.flow import make_method
+from fmfs.models import UNet
+from fmfs.utils import EMA, get_device, save_loss_curve, save_samples, set_seed
 
 
 def parse_args() -> argparse.Namespace:

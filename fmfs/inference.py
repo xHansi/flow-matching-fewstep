@@ -1,7 +1,7 @@
 import torch
 
-from src.flow import make_method
-from src.models import UNet
+from fmfs.flow import make_method
+from fmfs.models import UNet
 
 
 def load_checkpoint(path: str, device: torch.device, use_ema: bool = True):

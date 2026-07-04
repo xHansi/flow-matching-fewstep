@@ -5,7 +5,7 @@ import torch
 import torch.nn.functional as F
 from torch import nn
 
-from src.data import make_loaders
+from fmfs.data import make_loaders
 
 
 class MNISTClassifier(nn.Module):

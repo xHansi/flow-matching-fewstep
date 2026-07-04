@@ -5,11 +5,11 @@ import torch
 from torch import optim
 from tqdm import tqdm
 
-from src.data import DATASET_META
-from src.flow import RectifiedFlow
-from src.inference import load_checkpoint
-from src.models import UNet
-from src.utils import EMA, get_device, save_loss_curve, save_samples, set_seed
+from fmfs.data import DATASET_META
+from fmfs.flow import RectifiedFlow
+from fmfs.inference import load_checkpoint
+from fmfs.models import UNet
+from fmfs.utils import EMA, get_device, save_loss_curve, save_samples, set_seed
 
 
 def parse_args() -> argparse.Namespace:

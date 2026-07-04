@@ -3,9 +3,9 @@ from pathlib import Path
 
 import torch
 
-from src.data import DATASET_META
-from src.inference import load_checkpoint, sample_kwargs
-from src.utils import get_device, save_samples, set_seed
+from fmfs.data import DATASET_META
+from fmfs.inference import load_checkpoint, sample_kwargs
+from fmfs.utils import get_device, save_samples, set_seed
 
 
 def parse_args() -> argparse.Namespace:

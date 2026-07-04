@@ -4,11 +4,11 @@ from pathlib import Path
 
 import torch
 
-from src.data import DATASET_META, make_loaders
-from src.inference import load_checkpoint, sample_kwargs
-from src.metrics import MNISTFID, InceptionFID, frechet, generate
-from src.metrics.fid import features_over
-from src.utils import get_device, save_fid_curve, set_seed
+from fmfs.data import DATASET_META, make_loaders
+from fmfs.inference import load_checkpoint, sample_kwargs
+from fmfs.metrics import MNISTFID, InceptionFID, frechet, generate
+from fmfs.metrics.fid import features_over
+from fmfs.utils import get_device, save_fid_curve, set_seed
 
 
 def parse_args() -> argparse.Namespace:
