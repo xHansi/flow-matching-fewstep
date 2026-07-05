@@ -54,6 +54,11 @@ many more steps to match it — consistent with the hypothesis.
 
 Flow Matching already produces clean, correctly-conditioned digits at **2 steps**.
 
+**Sampling trajectory (noise → digit, 8 Euler steps).** Each row is one digit; columns go
+from pure noise (left) to the final image (right):
+
+![](../figures/flow_trajectory_8steps.png)
+
 ### 3.3 Finding: classifier-free guidance and step count
 
 With guidance (cfg=2.0), DDPM samples **over-saturate and degrade at high step counts**

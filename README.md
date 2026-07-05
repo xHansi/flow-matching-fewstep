@@ -19,6 +19,14 @@ Even at **2 steps** Flow Matching produces clearly readable digits:
 |---|---|
 | ![](figures/flow_2steps.png) | ![](figures/flow_8steps.png) |
 
+**How generation works (the iterations).** Each row is one digit; columns go left→right from
+pure noise to the final image as the ODE is integrated in 8 Euler steps:
+
+![Flow Matching sampling trajectory: noise to digit in 8 steps](figures/flow_trajectory_8steps.png)
+
+`notebooks/03_walkthrough.ipynb` reproduces these and more (16-step trajectories, guidance
+sweep, DDPM comparison).
+
 ---
 
 ## Table of contents
