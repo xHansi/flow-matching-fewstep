@@ -61,11 +61,14 @@ class RectifiedFlow:
         image_size: int = 32,
         channels: int = 1,
         cfg_scale: float = 1.0,
+        return_trajectory: bool = False,
     ) -> torch.Tensor:
         device = next(model.parameters()).device
         x = torch.randn(y.size(0), channels, image_size, image_size, device=device)
+        traj = [x.clone()]
         ts = torch.linspace(0, 1, steps + 1, device=device)
         for i in range(steps):
             t = ts[i].expand(y.size(0))
             x = x + self.velocity(model, x, t, y, cfg_scale) * (ts[i + 1] - ts[i])
-        return x
+            traj.append(x.clone())
+        return (x, torch.stack(traj)) if return_trajectory else x

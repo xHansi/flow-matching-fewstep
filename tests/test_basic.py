@@ -65,6 +65,15 @@ def test_sampling_is_deterministic():
     assert torch.allclose(a, b)
 
 
+def test_sample_trajectory_shape():
+    m = tiny_model()
+    y = torch.randint(0, 3, (2,))
+    for name in ("flow", "ddpm"):
+        x, traj = make_method(name).sample(m, y, steps=5, return_trajectory=True)
+        assert x.shape == (2, 1, 32, 32)
+        assert traj.shape == (6, 2, 1, 32, 32)  # steps + 1 states
+
+
 def test_coins_flat_loader(tmp_path):
     for i in range(8):
         arr = (np.random.rand(40, 40) * 255).astype("uint8")

@@ -43,12 +43,14 @@ class DDPM:
         channels: int = 1,
         cfg_scale: float = 1.0,
         eta: float = 0.0,
+        return_trajectory: bool = False,
     ) -> torch.Tensor:
         device = next(model.parameters()).device
         acp = self.alphas_cumprod.to(device)
         seq = torch.linspace(0, self.T - 1, steps, device=device).round().long()
 
         x = torch.randn(y.size(0), channels, image_size, image_size, device=device)
+        traj = [x.clone()]
         for i in reversed(range(steps)):
             t = seq[i]
             a_t = acp[t]
@@ -58,4 +60,5 @@ class DDPM:
             sigma = eta * ((1 - a_prev) / (1 - a_t)).sqrt() * (1 - a_t / a_prev).sqrt()
             noise = torch.randn_like(x) if eta > 0 and i > 0 else 0.0
             x = a_prev.sqrt() * x0 + (1 - a_prev - sigma**2).sqrt() * eps + sigma * noise
-        return x
+            traj.append(x.clone())
+        return (x, torch.stack(traj)) if return_trajectory else x

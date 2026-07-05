@@ -1,5 +1,5 @@
 from .ema import EMA
-from .plotting import save_fid_curve, save_loss_curve, save_samples
+from .plotting import save_fid_curve, save_loss_curve, save_samples, save_trajectory
 from .seed import get_device, set_seed
 
 __all__ = [
@@ -8,5 +8,6 @@ __all__ = [
     "save_fid_curve",
     "save_loss_curve",
     "save_samples",
+    "save_trajectory",
     "set_seed",
 ]
