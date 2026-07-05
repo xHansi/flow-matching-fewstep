@@ -34,17 +34,33 @@ straighten the paths enough to sample in even fewer steps?
 ### 3.1 FID vs. sampling steps (core result)
 
 ![FID vs steps (InceptionV3)](../figures/fid_vs_steps_inception.png)
+![FID vs steps (MNIST-FID)](../figures/fid_vs_steps_mnist.png)
+
+**InceptionV3-FID** (lower is better; 3000 samples, no guidance):
 
 | steps | 1 | 2 | 4 | 8 | 16 | 50 | 100 |
 |-------|---|---|---|---|----|----|-----|
-| Flow (Inception FID)  | _ | _ | _ | _ | _ | _ | _ |
-| DDPM (Inception FID)  | _ | _ | _ | _ | _ | _ | _ |
-| Reflow (Inception FID)| _ | _ | _ | _ | _ | _ | _ |
+| Flow   | 191 | **25.9** | **12.9** | **8.4** | 7.1 | 6.9 | 7.0 |
+| DDPM   | 419 | 255 | 27.6 | 13.7 | 9.0 | **7.8** | 8.4 |
+| Reflow | **96** | 43.9 | 32.2 | 37.8 | 45.9 | 45.2 | 44.2 |
 
-*(numbers from the cfg=1.0 sweep; see `results/fid/fid.json`)*
+**MNIST-FID** (domain-matched classifier features):
 
-**Takeaway.** Flow Matching reaches near-best FID already at ~4–8 steps, while DDPM needs
-many more steps to match it — consistent with the hypothesis.
+| steps | 1 | 2 | 4 | 8 | 16 | 50 | 100 |
+|-------|---|---|---|---|----|----|-----|
+| Flow   | 562 | 84.4 | 9.3 | 2.3 | 2.5 | 3.6 | 4.1 |
+| DDPM   | 38666 | 1617 | 67.7 | 4.4 | **2.4** | 4.5 | 5.6 |
+| Reflow | **13.0** | **4.3** | 3.8 | 3.5 | 3.4 | **3.0** | 3.1 |
+
+**Takeaways.**
+- **Flow ≫ DDPM at few steps.** At 2 steps Flow's Inception-FID is 26 vs DDPM's 255 (~10×);
+  at 4 steps 12.9 vs 27.6 (~2×). DDPM only catches up around 16–50 steps — exactly the
+  hypothesised behaviour.
+- Both plateau at a similar quality (~7 Inception-FID) once many steps are used.
+- **Reflow** is the strongest at *very* few steps on the digit-identity metric (MNIST-FID 4.3
+  at 2 steps, vs Flow's 84), i.e. its straightened paths nail the class in 1–2 steps — but a
+  grainy background inflates its InceptionV3-FID. The two metrics thus tell complementary
+  stories (identity vs. texture); reflow trained on a light budget here.
 
 ### 3.2 Sample grids: few vs. many steps
 
@@ -78,9 +94,9 @@ With guidance (cfg=2.0), DDPM samples **over-saturate and degrade at high step c
 - Flow Matching is markedly more few-step-friendly than DDPM on MNIST, as hypothesized.
 - InceptionV3-FID is not ideal for grayscale MNIST (out-of-domain), hence the second,
   domain-matched MNIST-FID metric.
-- **Reflow** produced correct digit shapes at few steps but a grainy background under a
-  light training budget (20k pairs, 15 epochs) → high FID; a heavier reflow run is future
-  work.
+- **Reflow** (light budget: 20k pairs, 15 epochs) already gives the best *digit-identity* at
+  1–2 steps (MNIST-FID) but a grainy background inflates its InceptionV3-FID; a heavier reflow
+  run to clean the background is future work.
 - CFG interacts with step count — a clean baseline comparison must fix the guidance scale.
 
 ## 5. Reproducibility

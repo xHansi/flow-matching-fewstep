@@ -13,6 +13,11 @@ Flow Matching vs. DDPM? *Hypothesis:* Flow Matching stays sharp at 2–8 steps; 
 
 **Headline result (first Kaggle T4 run, class-conditional MNIST, InceptionV3-FID, no
 guidance).** Flow Matching reaches near-best FID already at ~4–8 steps; DDPM needs many more.
+At **2 steps** Flow's FID is **26 vs DDPM's 255** (~10×); at **4 steps 12.9 vs 27.6** — DDPM
+only catches up around 16–50 steps.
+
+![FID vs. sampling steps (InceptionV3)](figures/fid_vs_steps_inception.png)
+
 Even at **2 steps** Flow Matching produces clearly readable digits:
 
 | Flow Matching — 2 steps | Flow Matching — 8 steps |
