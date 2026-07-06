@@ -1,12 +1,15 @@
 import torch
 from torch.utils.data import DataLoader
 from torchvision import transforms
-from torchvision.datasets import MNIST
+from torchvision.datasets import MNIST, FashionMNIST
 
-DATASET_META = {"mnist": dict(channels=1, num_classes=10, image_size=32)}
+DATASET_META = {
+    "mnist": dict(channels=1, num_classes=10, image_size=32),
+    "fashion": dict(channels=1, num_classes=10, image_size=32),
+}
 DATASETS = set(DATASET_META)
 
-_BUILDERS = {"mnist": MNIST}
+_BUILDERS = {"mnist": MNIST, "fashion": FashionMNIST}
 
 
 def _transform(image_size: int) -> transforms.Compose:

@@ -8,7 +8,7 @@ from torch import nn
 from fmfs.data import make_loaders
 
 
-class MNISTClassifier(nn.Module):
+class SmallClassifier(nn.Module):
     def __init__(self):
         super().__init__()
         self.body = nn.Sequential(
@@ -32,14 +32,14 @@ class MNISTClassifier(nn.Module):
         return self.head(self.body(x))
 
 
-def train_classifier(device: torch.device, epochs: int = 3, cache: str = "results/mnist_clf.pt"):
-    clf = MNISTClassifier().to(device)
-    path = Path(cache)
+def train_classifier(device: torch.device, dataset: str = "mnist", epochs: int = 3):
+    clf = SmallClassifier().to(device)
+    path = Path(f"results/{dataset}_clf.pt")
     if path.exists():
         clf.load_state_dict(torch.load(path, map_location=device))
         return clf.eval()
 
-    train, _ = make_loaders("mnist", batch_size=128, num_workers=2)
+    train, _ = make_loaders(dataset, batch_size=128, num_workers=2)
     opt = torch.optim.Adam(clf.parameters(), 1e-3)
     for _ in range(epochs):
         clf.train()
@@ -54,9 +54,11 @@ def train_classifier(device: torch.device, epochs: int = 3, cache: str = "result
 
 
 class MNISTFID:
-    def __init__(self, device: torch.device, epochs: int = 3):
+    """Domain-matched FID: features from a small classifier trained on `dataset`."""
+
+    def __init__(self, device: torch.device, dataset: str = "mnist", epochs: int = 3):
         self.device = device
-        self.clf = train_classifier(device, epochs=epochs)
+        self.clf = train_classifier(device, dataset=dataset, epochs=epochs)
 
     @torch.no_grad()
     def features(self, images: torch.Tensor) -> np.ndarray:

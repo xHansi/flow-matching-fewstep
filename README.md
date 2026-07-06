@@ -133,7 +133,7 @@ Key flags (defaults in brackets):
 | flag | meaning |
 |------|---------|
 | `--method {flow,ddpm}` | Flow Matching or the DDPM baseline `[flow]` |
-| `--dataset {mnist}` | dataset `[mnist]` |
+| `--dataset {mnist,fashion}` | dataset `[mnist]` |
 | `--epochs N` | training epochs `[30]` |
 | `--max-steps N` | cap total optimizer steps (0 = full epochs) — handy for a quick local check `[0]` |
 | `--batch-size N` | `[128]` |
@@ -255,8 +255,10 @@ kaggle kernels push -p <folder> --accelerator NvidiaTeslaT4
 - **Reflow.** Retrain the flow model on its own `(noise, sample)` pairs to straighten paths.
 - **Metrics.** InceptionV3 FID (`pytorch-fid`) + a lightweight MNIST-FID (small CNN classifier).
 
-The dataset layer is a small registry (`fmfs/data/datasets.py`), so a second class-conditional
-32×32 dataset (e.g. Fashion-MNIST) is a one-line addition.
+- **Datasets.** MNIST (digits) and **Fashion-MNIST** (clothing), both 32×32, class-conditional.
+  Select with `--dataset {mnist,fashion}`. Fashion is a harder, more textured domain — used to
+  study how the methods behave under a **domain shift**. The domain-matched FID classifier is
+  trained on whichever dataset is being evaluated (`--dataset`).
 
 ---
 

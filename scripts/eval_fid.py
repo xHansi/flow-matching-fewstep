@@ -37,12 +37,12 @@ def real_images(dataset: str, n: int) -> torch.Tensor:
     return torch.cat(imgs)[:n]
 
 
-def build_metrics(names: list[str], device: torch.device, clf_epochs: int) -> dict:
+def build_metrics(names: list[str], device: torch.device, dataset: str, clf_epochs: int) -> dict:
     m = {}
     if "inception" in names:
         m["inception"] = InceptionFID(device)
     if "mnist" in names:
-        m["mnist"] = MNISTFID(device, epochs=clf_epochs)
+        m["mnist"] = MNISTFID(device, dataset=dataset, epochs=clf_epochs)
     return m
 
 
@@ -52,7 +52,7 @@ def main() -> None:
     steps_list = [int(s) for s in args.steps.split(",")]
     metric_names = ["inception", "mnist"] if args.metric == "both" else [args.metric]
 
-    metrics = build_metrics(metric_names, device, args.clf_epochs)
+    metrics = build_metrics(metric_names, device, args.dataset, args.clf_epochs)
     reals = real_images(args.dataset, args.n_samples)
     real_feats = {k: features_over(m.features, reals, args.batch) for k, m in metrics.items()}
 
