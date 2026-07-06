@@ -44,7 +44,6 @@ sweep, DDPM comparison).
 - [Notebooks](#notebooks)
 - [Running on Kaggle (GPU)](#running-on-kaggle-gpu)
 - [Method details](#method-details)
-- [Second dataset: Roman coins](#second-dataset-roman-coins)
 - [Troubleshooting](#troubleshooting)
 
 ---
@@ -56,7 +55,7 @@ fmfs/                         importable package (the "library")
   models/unet.py              time- and class-conditioned UNet (+ CFG null class)
   flow/rectified_flow.py      interpolation, velocity target, Euler sampler, reflow coupling
   flow/ddpm.py                baseline: beta schedule, eps prediction, DDPM/DDIM samplers
-  data/datasets.py            MNIST loader; coins loader (FlatImageDataset)
+  data/datasets.py            MNIST loader (small registry, easy to extend)
   metrics/                    InceptionV3 FID (pytorch-fid) + lightweight MNIST-FID
   utils/                      seeds, device, EMA, plotting (grids, curves, trajectories)
   inference.py                checkpoint loader
@@ -134,7 +133,7 @@ Key flags (defaults in brackets):
 | flag | meaning |
 |------|---------|
 | `--method {flow,ddpm}` | Flow Matching or the DDPM baseline `[flow]` |
-| `--dataset {mnist,coins}` | dataset `[mnist]` |
+| `--dataset {mnist}` | dataset `[mnist]` |
 | `--epochs N` | training epochs `[30]` |
 | `--max-steps N` | cap total optimizer steps (0 = full epochs) — handy for a quick local check `[0]` |
 | `--batch-size N` | `[128]` |
@@ -193,12 +192,12 @@ download the InceptionV3 weights, once).
 ## Tests
 
 ```bash
-uv run pytest            # 7 fast CPU tests, a few seconds
+uv run pytest            # fast CPU tests, a few seconds
 ```
 
 Covers: UNet forward shapes, Flow/DDPM loss + backward, samplers at several step counts, the
 DDIM/ancestral `eta` paths, classifier-free-guidance path, EMA updates, sampler determinism
-under a fixed seed, the sampling-trajectory shape, and the coins loader (via synthetic images).
+under a fixed seed, and the sampling-trajectory shape.
 
 ---
 
@@ -256,19 +255,8 @@ kaggle kernels push -p <folder> --accelerator NvidiaTeslaT4
 - **Reflow.** Retrain the flow model on its own `(noise, sample)` pairs to straighten paths.
 - **Metrics.** InceptionV3 FID (`pytorch-fid`) + a lightweight MNIST-FID (small CNN classifier).
 
----
-
-## Second dataset: Roman coins
-
-The pipeline supports a second, unconditional grayscale dataset behind `--dataset coins`:
-
-```bash
-uv run python -m scripts.train --method flow --dataset coins --data-root /path/to/coin_images
-```
-
-`--data-root` is any folder of images (searched recursively; all treated as one class). On
-Kaggle, attach a coins dataset and point `--data-root` at `/kaggle/input/<dataset>`. This is
-scaffolded and unit-tested; a full coins run is future work.
+The dataset layer is a small registry (`fmfs/data/datasets.py`), so a second class-conditional
+32×32 dataset (e.g. Fashion-MNIST) is a one-line addition.
 
 ---
 

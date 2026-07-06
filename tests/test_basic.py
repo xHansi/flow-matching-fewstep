@@ -1,8 +1,5 @@
-import numpy as np
 import torch
-from PIL import Image
 
-from fmfs.data import make_loaders
 from fmfs.flow import make_method
 from fmfs.models import UNet
 from fmfs.utils import EMA, set_seed
@@ -72,15 +69,3 @@ def test_sample_trajectory_shape():
         x, traj = make_method(name).sample(m, y, steps=5, return_trajectory=True)
         assert x.shape == (2, 1, 32, 32)
         assert traj.shape == (6, 2, 1, 32, 32)  # steps + 1 states
-
-
-def test_coins_flat_loader(tmp_path):
-    for i in range(8):
-        arr = (np.random.rand(40, 40) * 255).astype("uint8")
-        Image.fromarray(arr, mode="L").save(tmp_path / f"coin_{i}.png")
-    train, test = make_loaders("coins", data_root=str(tmp_path), batch_size=2, num_workers=0)
-    x, y = next(iter(train))
-    assert x.shape == (2, 1, 32, 32)
-    assert x.min() >= -1.0 and x.max() <= 1.0
-    assert torch.equal(y, torch.zeros(2, dtype=y.dtype))
-    assert len(test.dataset) >= 1
