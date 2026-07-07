@@ -32,6 +32,29 @@ def save_fid_curve(curves: dict[str, tuple[list[int], list[float]]], path: str, 
     plt.close()
 
 
+def save_comparison(
+    panels: list[tuple[str, dict]], steps: list[int], path: str, title: str
+) -> None:
+    """Side-by-side FID-vs-steps panels. Each panel is (label, {method: {step: fid}})."""
+    fig, axes = plt.subplots(1, len(panels), figsize=(5.5 * len(panels), 4.2), sharey=True)
+    axes = axes if len(panels) > 1 else [axes]
+    styles = {"flow": "o-", "ddpm": "s--", "reflow": "^:"}
+    for ax, (label, data) in zip(axes, panels, strict=True):
+        for name, fmt in styles.items():
+            if name in data:
+                ax.plot(steps, [data[name][str(s)] for s in steps], fmt, label=name)
+        ax.set_xscale("log", base=2)
+        ax.set_xlabel("sampling steps")
+        ax.set_title(label)
+        ax.grid(True, which="both", alpha=0.3)
+    axes[0].set_ylabel("FID")
+    axes[0].legend()
+    fig.suptitle(title)
+    fig.tight_layout()
+    fig.savefig(path, dpi=120)
+    plt.close(fig)
+
+
 def save_loss_curve(losses: list[float], path: str) -> None:
     plt.figure(figsize=(6, 4))
     plt.plot(losses, lw=0.8)

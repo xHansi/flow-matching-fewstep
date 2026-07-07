@@ -15,5 +15,9 @@ mnist/          results on MNIST (digits)
   ddpm_100steps_cfg{1,2}_*.png  the guidance-vs-steps finding (§3.3 of the report)
 fashion/        the same, on Fashion-MNIST (clothing) — the domain-shift run
 comparison/
-  fid_vs_steps_inception.png    MNIST vs. Fashion side by side
+  fid_vs_steps_inception.png    MNIST vs. Fashion side by side (InceptionV3)
+  fid_vs_steps_classifier.png   MNIST vs. Fashion side by side (classifier-FID)
 ```
+
+Regenerate the comparison plots from the committed JSONs with
+`python -m scripts.compare_datasets` (no training needed).

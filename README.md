@@ -90,7 +90,8 @@ flow-matching-fewstep/
 │   ├── train.py             train a model      (--method flow|ddpm  --dataset mnist|fashion)
 │   ├── reflow.py            reflow a trained flow model
 │   ├── sample.py           generate sample grids at several step counts
-│   └── eval_fid.py         FID vs. step count for one or more checkpoints
+│   ├── eval_fid.py         FID vs. step count for one or more checkpoints
+│   └── compare_datasets.py side-by-side FID-vs-steps across datasets
 ├── notebooks/           01 demo · 02 full results (Kaggle) · 03 visual walkthrough
 ├── tests/               fast CPU tests (pytest)
 ├── figures/             committed figures, grouped by mnist/ · fashion/ · comparison/
@@ -156,8 +157,12 @@ uv run python -m scripts.eval_fid \
 
 This writes `results/fid/fid.json` and one `fid_vs_steps_<metric>.png` per metric.
 
-**Domain shift.** Repeat steps 1–4 with `--dataset fashion` (and `--dataset fashion` on
-`eval_fid`) to get the Fashion-MNIST results.
+**5. Domain shift.** Repeat steps 1–4 with `--dataset fashion` (and `--dataset fashion` on
+`eval_fid`), then build the side-by-side comparison from the two `fid.json` files:
+
+```bash
+uv run python -m scripts.compare_datasets     # writes figures/comparison/
+```
 
 **Prerequisites:** Python 3.11, ~2 GB disk for datasets + checkpoints, and internet on first
 run (dataset + InceptionV3 download). A GPU is optional locally but strongly recommended for

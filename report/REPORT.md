@@ -132,5 +132,7 @@ while DDPM is still noise. InceptionV3-FID (no guidance):
 
 ## 5. Reproducibility
 
-All figures are produced by `notebooks/02_results.ipynb` (runs on a Kaggle T4). Seeds are
-fixed; checkpoints store their own architecture. See `AI_USAGE.md` for the AI-use statement.
+All figures are produced by `notebooks/02_results.ipynb` (runs on a Kaggle T4); the
+domain-shift comparison plot is regenerated from the saved FID JSONs by
+`scripts/compare_datasets.py`. Seeds are fixed; checkpoints store their own architecture.
+See `AI_USAGE.md` for the AI-use statement.

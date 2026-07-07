@@ -1,8 +1,11 @@
+import numpy as np
 import torch
 
+from fmfs.data import DATASET_META
 from fmfs.flow import make_method
+from fmfs.metrics import frechet
 from fmfs.models import UNet
-from fmfs.utils import EMA, set_seed
+from fmfs.utils import EMA, save_comparison, set_seed
 
 
 def tiny_model() -> UNet:
@@ -69,3 +72,26 @@ def test_sample_trajectory_shape():
         x, traj = make_method(name).sample(m, y, steps=5, return_trajectory=True)
         assert x.shape == (2, 1, 32, 32)
         assert traj.shape == (6, 2, 1, 32, 32)  # steps + 1 states
+
+
+def test_dataset_meta_consistent():
+    assert {"mnist", "fashion"} <= set(DATASET_META)
+    for meta in DATASET_META.values():
+        assert meta["image_size"] == 32
+        assert meta["num_classes"] == 10
+        assert meta["channels"] == 1
+
+
+def test_frechet_zero_for_identical_stats():
+    rng = np.random.default_rng(0)
+    feats = rng.standard_normal((256, 16))
+    assert frechet(feats, feats) < 1e-6
+    shifted = feats + 5.0
+    assert frechet(feats, shifted) > 1.0
+
+
+def test_save_comparison_writes_file(tmp_path):
+    data = {m: {str(s): 10.0 / s for s in (1, 2, 4)} for m in ("flow", "ddpm")}
+    out = tmp_path / "cmp.png"
+    save_comparison([("A", data), ("B", data)], [1, 2, 4], str(out), "t")
+    assert out.exists() and out.stat().st_size > 0
