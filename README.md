@@ -32,6 +32,12 @@ pure noise to the final image as the ODE is integrated in 8 Euler steps:
 `notebooks/03_walkthrough.ipynb` reproduces these and more (16-step trajectories, guidance
 sweep, DDPM comparison).
 
+**Domain shift (digits → clothing).** The same story holds on Fashion-MNIST: Flow keeps its
+few-step lead over DDPM, though the gap narrows and absolute quality drops on the harder,
+more textured domain. See [`report/REPORT.md`](report/REPORT.md) §3.5.
+
+![FID vs. steps on both domains](figures/domain_comparison_inception.png)
+
 ---
 
 ## Table of contents

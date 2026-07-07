@@ -89,11 +89,43 @@ With guidance (cfg=2.0), DDPM samples **over-saturate and degrade at high step c
 
 ![Flow loss](../figures/flow_loss.png)
 
+### 3.5 Domain shift: digits → clothing (Fashion-MNIST)
+
+To test whether the few-step advantage is specific to digits, we ran the **identical**
+pipeline on Fashion-MNIST (clothing; a harder, more textured 32×32 domain), same config.
+
+![FID vs. steps on both domains](../figures/domain_comparison_inception.png)
+
+| Flow, 2 steps (Fashion) | DDPM, 2 steps (Fashion) |
+|---|---|
+| ![](../figures/fashion/flow_2steps.png) | ![](../figures/fashion/ddpm_2steps.png) |
+
+Same qualitative picture as on MNIST: at 2 steps Flow already produces recognizable clothing
+while DDPM is still noise. InceptionV3-FID (no guidance):
+
+| steps | 1 | 2 | 4 | 8 | 16 | 50 | 100 |
+|-------|---|---|---|---|----|----|-----|
+| Flow (Fashion)   | 228 | **50.7** | **26.4** | 19.2 | 15.7 | 13.3 | 13.0 |
+| DDPM (Fashion)   | 403 | 263 | 43.9 | 20.9 | 16.1 | 13.5 | 13.2 |
+| Reflow (Fashion) | **73** | 37.0 | 32.1 | 32.6 | 34.1 | 34.6 | 35.0 |
+
+**Findings.**
+- **The few-step advantage is robust to the domain shift.** On both domains Flow ≫ DDPM at
+  1–4 steps (Fashion 2 steps: 50.7 vs 263, ~5×) and they converge once many steps are used.
+- **Absolute quality is worse on the harder domain** — the plateau FID roughly doubles
+  (~13 for Fashion vs ~7 for MNIST), as expected for more textured images.
+- **DDPM catches up slightly earlier on Fashion:** at 8 steps the two are essentially tied
+  (19.2 vs 20.9), whereas on MNIST Flow still clearly led at 8 (8.4 vs 13.7). So the *size* of
+  the few-step gap shrinks a bit under the harder domain, but its *direction* does not.
+- Reflow again wins at 1–2 steps on the domain-matched metric on both datasets.
+
 ## 4. Discussion & limitations
 
-- Flow Matching is markedly more few-step-friendly than DDPM on MNIST, as hypothesized.
-- InceptionV3-FID is not ideal for grayscale MNIST (out-of-domain), hence the second,
-  domain-matched MNIST-FID metric.
+- Flow Matching is markedly more few-step-friendly than DDPM, as hypothesized — and this
+  holds across a **domain shift** (digits → clothing), though the gap narrows on the harder
+  domain and absolute quality drops.
+- InceptionV3-FID is not ideal for grayscale data (out-of-domain), hence the second,
+  domain-matched classifier-FID (trained on whichever dataset is evaluated).
 - **Reflow** (light budget: 20k pairs, 15 epochs) already gives the best *digit-identity* at
   1–2 steps (MNIST-FID) but a grainy background inflates its InceptionV3-FID; a heavier reflow
   run to clean the background is future work.
