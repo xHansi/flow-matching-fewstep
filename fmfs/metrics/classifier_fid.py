@@ -53,7 +53,7 @@ def train_classifier(device: torch.device, dataset: str = "mnist", epochs: int =
     return clf.eval()
 
 
-class MNISTFID:
+class ClassifierFID:
     """Domain-matched FID: features from a small classifier trained on `dataset`."""
 
     def __init__(self, device: torch.device, dataset: str = "mnist", epochs: int = 3):

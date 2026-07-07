@@ -1,7 +1,6 @@
 # Few-Step Image Generation: Flow Matching vs. DDPM
 
-*DLAI, Sapienza — single-student project. Draft skeleton; FID numbers filled from the
-Kaggle run (`results/fid/fid.json`), figures from `figures/`.*
+*DLAI, Sapienza — single-student project. FID numbers and figures from the Kaggle T4 runs.*
 
 ## 1. Question & motivation
 
@@ -24,7 +23,7 @@ straighten the paths enough to sample in even fewer steps?
 - **DDPM baseline.** Linear β schedule, ε-prediction. A unified DDIM update covers
   deterministic DDIM (`η=0`) and stochastic ancestral DDPM (`η=1`) on a respaced schedule.
 - **Reflow.** Retrain the flow model on its own `(noise, sample)` pairs to straighten paths.
-- **Metrics.** Standard FID (InceptionV3, `pytorch-fid`) and a lightweight MNIST-FID (a
+- **Metrics.** Standard FID (InceptionV3, `pytorch-fid`) and a lightweight classifier-FID (a
   small CNN classifier trained on MNIST). FID measured **without** classifier-free guidance
   (guidance inflates FID); guidance is used only for the qualitative grids.
 - **Compute.** Trained on a Kaggle T4; developed locally on Apple Silicon.
@@ -33,8 +32,8 @@ straighten the paths enough to sample in even fewer steps?
 
 ### 3.1 FID vs. sampling steps (core result)
 
-![FID vs steps (InceptionV3)](../figures/fid_vs_steps_inception.png)
-![FID vs steps (MNIST-FID)](../figures/fid_vs_steps_mnist.png)
+![FID vs steps (InceptionV3)](../figures/mnist/fid_vs_steps_inception.png)
+![FID vs steps (classifier-FID)](../figures/mnist/fid_vs_steps_classifier.png)
 
 **InceptionV3-FID** (lower is better; 3000 samples, no guidance):
 
@@ -44,7 +43,7 @@ straighten the paths enough to sample in even fewer steps?
 | DDPM   | 419 | 255 | 27.6 | 13.7 | 9.0 | **7.8** | 8.4 |
 | Reflow | **96** | 43.9 | 32.2 | 37.8 | 45.9 | 45.2 | 44.2 |
 
-**MNIST-FID** (domain-matched classifier features):
+**classifier-FID** (domain-matched classifier features):
 
 | steps | 1 | 2 | 4 | 8 | 16 | 50 | 100 |
 |-------|---|---|---|---|----|----|-----|
@@ -57,7 +56,7 @@ straighten the paths enough to sample in even fewer steps?
   at 4 steps 12.9 vs 27.6 (~2×). DDPM only catches up around 16–50 steps — exactly the
   hypothesised behaviour.
 - Both plateau at a similar quality (~7 Inception-FID) once many steps are used.
-- **Reflow** is the strongest at *very* few steps on the digit-identity metric (MNIST-FID 4.3
+- **Reflow** is the strongest at *very* few steps on the digit-identity metric (classifier-FID 4.3
   at 2 steps, vs Flow's 84), i.e. its straightened paths nail the class in 1–2 steps — but a
   grainy background inflates its InceptionV3-FID. The two metrics thus tell complementary
   stories (identity vs. texture); reflow trained on a light budget here.
@@ -66,14 +65,14 @@ straighten the paths enough to sample in even fewer steps?
 
 | Flow, 2 steps | Flow, 8 steps |
 |---|---|
-| ![](../figures/flow_2steps.png) | ![](../figures/flow_8steps.png) |
+| ![](../figures/mnist/flow_2steps.png) | ![](../figures/mnist/flow_8steps.png) |
 
 Flow Matching already produces clean, correctly-conditioned digits at **2 steps**.
 
 **Sampling trajectory (noise → digit, 8 Euler steps).** Each row is one digit; columns go
 from pure noise (left) to the final image (right):
 
-![](../figures/flow_trajectory_8steps.png)
+![](../figures/mnist/flow_trajectory_8steps.png)
 
 ### 3.3 Finding: classifier-free guidance and step count
 
@@ -83,18 +82,18 @@ With guidance (cfg=2.0), DDPM samples **over-saturate and degrade at high step c
 
 | DDPM 100 steps, cfg=2.0 (over-saturated) | DDPM 100 steps, cfg=1.0 (clean) |
 |---|---|
-| ![](../figures/ddpm_100steps_cfg2_oversaturated.png) | ![](../figures/ddpm_100steps_cfg1_clean.png) |
+| ![](../figures/mnist/ddpm_100steps_cfg2_oversaturated.png) | ![](../figures/mnist/ddpm_100steps_cfg1_clean.png) |
 
 ### 3.4 Training loss
 
-![Flow loss](../figures/flow_loss.png)
+![Flow loss](../figures/mnist/flow_loss.png)
 
 ### 3.5 Domain shift: digits → clothing (Fashion-MNIST)
 
 To test whether the few-step advantage is specific to digits, we ran the **identical**
 pipeline on Fashion-MNIST (clothing; a harder, more textured 32×32 domain), same config.
 
-![FID vs. steps on both domains](../figures/domain_comparison_inception.png)
+![FID vs. steps on both domains](../figures/comparison/fid_vs_steps_inception.png)
 
 | Flow, 2 steps (Fashion) | DDPM, 2 steps (Fashion) |
 |---|---|
@@ -127,7 +126,7 @@ while DDPM is still noise. InceptionV3-FID (no guidance):
 - InceptionV3-FID is not ideal for grayscale data (out-of-domain), hence the second,
   domain-matched classifier-FID (trained on whichever dataset is evaluated).
 - **Reflow** (light budget: 20k pairs, 15 epochs) already gives the best *digit-identity* at
-  1–2 steps (MNIST-FID) but a grainy background inflates its InceptionV3-FID; a heavier reflow
+  1–2 steps (classifier-FID) but a grainy background inflates its InceptionV3-FID; a heavier reflow
   run to clean the background is future work.
 - CFG interacts with step count — a clean baseline comparison must fix the guidance scale.
 

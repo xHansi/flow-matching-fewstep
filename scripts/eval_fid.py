@@ -6,7 +6,7 @@ import torch
 
 from fmfs.data import DATASET_META, make_loaders
 from fmfs.inference import load_checkpoint, sample_kwargs
-from fmfs.metrics import MNISTFID, InceptionFID, frechet, generate
+from fmfs.metrics import ClassifierFID, InceptionFID, frechet, generate
 from fmfs.metrics.fid import features_over
 from fmfs.utils import get_device, save_fid_curve, set_seed
 
@@ -19,8 +19,8 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--n-samples", type=int, default=5000)
     p.add_argument("--cfg-scale", type=float, default=2.0)
     p.add_argument("--eta", type=float, default=0.0, help="DDPM only: 0=DDIM, 1=ancestral")
-    p.add_argument("--metric", choices=["inception", "mnist", "both"], default="both")
-    p.add_argument("--clf-epochs", type=int, default=3, help="MNIST-FID classifier epochs")
+    p.add_argument("--metric", choices=["inception", "classifier", "both"], default="both")
+    p.add_argument("--clf-epochs", type=int, default=3, help="classifier-FID training epochs")
     p.add_argument("--batch", type=int, default=256)
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--out", default="results/fid")
@@ -41,8 +41,8 @@ def build_metrics(names: list[str], device: torch.device, dataset: str, clf_epoc
     m = {}
     if "inception" in names:
         m["inception"] = InceptionFID(device)
-    if "mnist" in names:
-        m["mnist"] = MNISTFID(device, dataset=dataset, epochs=clf_epochs)
+    if "classifier" in names:
+        m["classifier"] = ClassifierFID(device, dataset=dataset, epochs=clf_epochs)
     return m
 
 
@@ -50,7 +50,7 @@ def main() -> None:
     args = parse_args()
     device = get_device()
     steps_list = [int(s) for s in args.steps.split(",")]
-    metric_names = ["inception", "mnist"] if args.metric == "both" else [args.metric]
+    metric_names = ["inception", "classifier"] if args.metric == "both" else [args.metric]
 
     metrics = build_metrics(metric_names, device, args.dataset, args.clf_epochs)
     reals = real_images(args.dataset, args.n_samples)
