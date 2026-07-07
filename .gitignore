@@ -20,3 +20,6 @@ checkpoints/
 .DS_Store
 .idea/
 .vscode/
+
+# notebook scratch output
+demo_out/
