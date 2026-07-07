@@ -24,7 +24,6 @@ then repeats the whole thing on Fashion-MNIST to see if the conclusion survives 
 - [Running on Kaggle (GPU)](#running-on-kaggle-gpu)
 - [Data](#data)
 - [Tests](#tests)
-- [Troubleshooting](#troubleshooting)
 - [AI use](#ai-use)
 
 ---
@@ -209,16 +208,6 @@ uv run pytest        # fast CPU tests, a few seconds
 Covers UNet forward shapes, Flow/DDPM loss + backward, samplers at several step counts, the
 DDIM/ancestral `η` paths, the classifier-free-guidance path, EMA updates, sampler determinism
 under a fixed seed, and the sampling-trajectory shape.
-
-## Troubleshooting
-
-| symptom | cause / fix |
-|---------|-------------|
-| `CUDA error: no kernel image ...` on Kaggle | You got a **P100** — switch the accelerator to **T4**. |
-| `ModuleNotFoundError: fmfs` running a script | Run from the **repo root** as a module: `python -m scripts.train`. |
-| FID step can't download InceptionV3 | Enable internet (Kaggle) or check your connection; it downloads once. |
-| Dataset download fails | Same — needs internet on first run; cached afterwards under `data/`. |
-| Training is slow locally | CPU/MPS is much slower than a T4 — use `--max-steps` for a smoke test, or train on Kaggle. |
 
 ## AI use
 
