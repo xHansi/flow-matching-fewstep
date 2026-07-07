@@ -23,3 +23,6 @@ checkpoints/
 
 # notebook scratch output
 demo_out/
+
+# report is a local deliverable, not tracked
+report/
