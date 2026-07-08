@@ -4,14 +4,15 @@ __pycache__/
 .venv/
 *.egg-info/
 
-# data & artifacts (anchored to repo root so it does not match fmfs/data/)
-/data/
+# artifacts
 results/**/*.png
 results/**/*.pt
 results/**/samples/
 checkpoints/
 *.pt
 *.ckpt
+# but keep the small classifier so classifier-FID is reproducible without retraining
+!results/mnist_clf.pt
 
 # notebooks
 .ipynb_checkpoints/
@@ -21,8 +22,6 @@ checkpoints/
 .idea/
 .vscode/
 
-# notebook scratch output
-demo_out/
-
-# report is a local deliverable, not tracked
-report/
+# report: only the final submission PDF is tracked; the LaTeX source stays local
+report/*
+!report/Johannes Erhard 2284905 - Generating Images in Few Steps - Flow Matching versus DDPM.pdf
